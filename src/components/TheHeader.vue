@@ -5,8 +5,10 @@
         <i class="fa-brands fa-spotify spotify-icon my-2"></i>
       </div>
       <div class="d-flex align-items-center">
-        <SearchDisc>
-          @search="onSearchChange" @reset="onSearchReset" :genere="genere"
+        <SearchDisc
+          :lista-generi="listaGeneri"
+          @searchGenre="$emit('searchGenre', $event)"
+        >
         </SearchDisc>
       </div>
     </div>
@@ -14,41 +16,24 @@
 </template>
 
 <script>
-import discList from "./TheMain.vue";
 import SearchDisc from "./SearchDisc.vue";
 export default {
   name: "TheHeader",
   components: { SearchDisc },
   props: {
-    genere: String,
+    listaGeneri: Array,
   },
-  data() {
-    return {
-      discList,
-      searchText: ""
-    }
-  },
-  computed: {
-    getGenresList() {
-      const list = [];
-      this.discList.forEach((disc) => {
-        if (!list.includes(disc.genre)) {
-          list.push(disc.genre);
-        }
-      });
-      return list;
-    },
-  },
+
   methods: {
     onSearchChange() {
       return this.discList.filter((disc) => {
-        return disc.genre
+        return disc.name
           .toLowerCase()
           .includes(this.searchText.trim(" ").toLowerCase());
       });
     },
     onSearchReset() {
-      this.searchText = ""
+      this.searchText = "";
     },
   },
 };

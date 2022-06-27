@@ -1,12 +1,12 @@
 <template>
   <form class="d-flex">
     <div class="input-group">
-      <input
-        type="text"
-        class="form-control"
-        placeholder="Genere musicale"
-        v-model="searchText"
-      />
+      <select type="text" class="form-select" v-model="genre">
+        <option value="">Scegli un genere</option>
+        <option v-for="(genere, i) in listaGeneriFromState" :key="i" :value="genere">
+          {{ genere }}
+        </option>
+      </select>
       <button class="btn btn-outline-primary" type="button" @click="makeSearch">
         Cerca
       </button>
@@ -18,22 +18,28 @@
 </template>
 
 <script>
+import { state } from "../store";
 export default {
   props: {
-    genere: String,
+    listaGeneri: Array,
   },
   data() {
     return {
-      searchText: "",
+      genre: "",
     };
+  },
+  computed: {
+    listaGeneriFromState() {
+      return state.listaGeneri;
+    },
   },
   methods: {
     makeSearch() {
-      this.$emit("search", this.searchText);
+      state.genereSelezionato = this.genre;
     },
-    makeReset() {
-      this.$emit("reset");
-    },
+     makeReset(){
+      state.genereSelezionato = "";
+    }
   },
 };
 </script>
